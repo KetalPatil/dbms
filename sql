@@ -72,3 +72,42 @@ select data.rollno,score.sname,score.marks from data cross join score on data.ro
 select count(rollno),city from data group by city;
 select a.rollno,a.sname,b.marks from data a inner join score b on a.rollno=b.rollno where a.city='pune';
 
+**procedure**
+delimiter @@
+ select * from score;
+ @@
+ create procedure updatestatus1(in mark1 int)
+    -> begin
+    -> declare mymark int;
+    -> set mymark=mark1;
+    -> if mymark>35 then
+    -> update score set status='pass' where marks=mymark;
+    -> else
+    -> update score set status='fail' where marks=mymark;
+    -> end if;
+    -> end;
+    -> @@
+call updatestatus1(100);
+    -> @@
+select * from score;
+
+**function**
+ delimiter $$
+mysql> create function student_data(age int)
+    ->  returns varchar (20)
+    ->  deterministic
+    ->  begin
+    ->  declare grade varchar(20);
+    ->  if marks>20 then
+    ->  set grade='engineer';
+    ->  elseif (marks<=18 and marks>=20) then
+    ->  set grade='student';
+    -> elseif marks<18 then;
+    ->  set grade='child';
+    ->  end if;
+    ->  return (grade);
+    ->  end$$
+select sname,marks, student_data(marks) from score;
+
+**cursor**
+
