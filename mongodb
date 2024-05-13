@@ -1,0 +1,100 @@
+db.dropdatabase()
+dob:new Date()
+mongosh
+use school;
+ db.createCollection("students");
+db.students.insertOne({sname:"ketal",age:20,rollno:1,city:"pune",gender:"female",dob:2004})
+ db.students.insertMany([{sname:"pranav",age:17,rollno:5,city:"jalgaon",gender:"male",dob:2009},{sname:"palak",age:16,rollno:10,city:"jalgaon",gender:"female",dob:2010},{sname:"harshal",age:30,rollno:50,city:"pune",gender:"male",dob:1994},{sname:"om",age:18,rollno:8,city:"nagar",gender:"male",dob:2007}])
+db.students.find()
+db.students.findOne()
+db.students.find({city:"pune"})
+ db.students.find({},{sname:1,rollno:1})
+db.students.find({},{city:0})
+db.students.updateOne({sname:"pranav"},{$set:{rollno:6}})
+db.students.updateMany({},{$inc:{rollno:1}})
+db.posts.deleteOne({ title: "Post Title 5" })
+db.posts.deleteMany({ category: "Technology" })
+db.listingsAndReviews.aggregate(
+    [ { $group : { _id : "$property_type" } } ]
+)
+db.movies.aggregate([ { $limit: 1 } ])
+db.restaurants.aggregate([
+  {
+    $project: {
+      "name": 1,
+      "cuisine": 1,
+      "address": 1
+    }
+  },
+  {
+    $limit: 5
+  }
+])
+db.listingsAndReviews.aggregate([ 
+  { 
+    $sort: { "accommodates": -1 } 
+  },
+  {
+    $project: {
+      "name": 1,
+      "accommodates": 1
+    }
+  },
+  {
+    $limit: 5
+  }
+])
+db.listingsAndReviews.aggregate([ 
+  { $match : { property_type : "House" } },
+  { $limit: 2 },
+  { $project: {
+    "name": 1,
+    "bedrooms": 1,
+    "price": 1
+  }}
+])
+db.restaurants.aggregate([
+  {
+    $addFields: {
+      avgGrade: { $avg: "$grades.score" }
+    }
+  },
+  {
+    $project: {
+      "name": 1,
+      "avgGrade": 1
+    }
+  },
+  {
+    $limit: 5
+  }
+])
+db.restaurants.aggregate([
+  {
+    $match: { "cuisine": "Chinese" }
+  },
+  {
+    $count: "totalChinese"
+  }
+])
+db.students.find().sort({rollno:1})
+db.students.find().limit(3)
+db.students.find().sort({rollno:1}).limit(2)
+db.students.find({},{city:true})
+db.students.updateOne({sname:"ketal"},{$unset:{rollno:""}})
+ db.students.find({name:{$ne:"ketal"}})
+ db.students.find({age:{$lt:20}})
+ db.students.find({age:{$lte:18}})
+ db.students.find({age:{$gt:18}})
+ db.students.find({age:{$gte:18}})
+ db.students.find({age:{$gte:20, $lte:18}})
+ db.students.find({sname:{$in:["om","pranav","jimmi"]}})
+ db.students.find({sname:{$nin:["om","pranav","jimmi"]}})
+db.students.find({$and:[{sname:"harshal"},{age:{$lte:30}}]})
+db.students.find({$or:[{sname:"harshal"},{age:{$lte:30}}]})
+db.students.find({$nor:[{sname:"harshal"},{age:{$lte:30}}]})
+db.students.find({age:{$not:{$gte:30}}})
+db.students.find({name:"om"}).explain("executionStats")
+db.students.createIndex({name:1})
+db.students.getIndexes()
+ db.students.dropIndex("name_1")
